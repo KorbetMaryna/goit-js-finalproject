@@ -28,19 +28,34 @@ function onImageClick(e) {
     openModalWindow(e);
 };
 
-function openModalWindow(e) {   
+function openModalWindow(e) {
     const bigImageURL = e.target.dataset.source;
     const modal = basicLightbox.create(`
-        <img src="${bigImageURL}" width="800" height="600">`
-    );
-    modal.show(); 
+        <img src="${bigImageURL}" width="800" height="600">`,
 
-    window.addEventListener('keydown', e => {
-        if (e.code === 'Escape') {
-        modal.close();
+        {
+            onShow: () => {
+                window.addEventListener('keydown', handlePressEscape);
+            },
+            onClose: () => {
+                window.removeEventListener('keydown', handlePressEscape);
+            },
         }
-    });
+    );
+
+    modal.show();
+
+    function handlePressEscape(e) {
+        if (e.code === 'Escape') {
+            modal.close();
+        }
+    }
 };
+
+
+
+
+
 
 
 
